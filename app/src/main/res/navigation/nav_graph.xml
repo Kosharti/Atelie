@@ -1,0 +1,22 @@
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/profileFragment">
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.atelie.ui.ProfileFragment"
+        android:label="Профиль" />
+    <fragment
+        android:id="@+id/catalogFragment"
+        android:name="com.example.atelie.ui.catalog.CatalogFragment"
+        android:label="Каталог" />
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.example.atelie.ui.cart.CartFragment"
+        android:label="Корзина" />
+    <fragment
+        android:id="@+id/supportFragment"
+        android:name="com.example.atelie.ui.support.SupportFragment"
+        android:label="Поддержка" />
+</navigation>
