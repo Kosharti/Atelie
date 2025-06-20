@@ -55,7 +55,7 @@ class OrderHistoryFragment : Fragment() {
         if (userId == -1) return
 
         CoroutineScope(Dispatchers.IO).launch {
-            val orders = db.atelierDao().getUserOrders(userId)
+            val orders = db.atelierDao().getUserOrders(userId).sortedBy { it.timestamp }
             withContext(Dispatchers.Main) {
                 if (orders.isEmpty()) {
                     binding.tvEmptyOrders.visibility = View.VISIBLE

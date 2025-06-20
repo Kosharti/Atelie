@@ -57,7 +57,7 @@ class OrderDetailsFragment : Fragment() {
             val products = db.atelierDao().getProductsByIds(items.map { it.productId })
 
             // Получаем все заказы пользователя для определения номера текущего заказа
-            val userOrders = order?.userId?.let { db.atelierDao().getUserOrders(it) } ?: emptyList()
+            val userOrders = order?.userId?.let { db.atelierDao().getUserOrders(it).sortedBy { it.timestamp }  } ?: emptyList()
             val orderNumber = userOrders.indexOfFirst { it.id == orderId } + 1
 
             withContext(Dispatchers.Main) {

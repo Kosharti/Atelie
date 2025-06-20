@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.atelie.data.AppDatabase
 import com.example.atelie.data.entity.User
@@ -15,6 +16,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.example.atelie.R
 
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
@@ -75,8 +77,16 @@ class ProfileFragment : Fragment() {
         isLoginMode = true
         binding.loginLayout.visibility = View.VISIBLE
         binding.registerLayout.visibility = View.GONE
-        binding.btnSwitchToLogin.isEnabled = false
-        binding.btnSwitchToRegister.isEnabled = true
+        binding.btnSwitchToLogin.apply {
+            isEnabled = false
+            setBackgroundResource(R.drawable.button_selected_bg)
+            setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+        }
+        binding.btnSwitchToRegister.apply {
+            isEnabled = true
+            setBackgroundResource(R.drawable.button_unselected_bg)
+            setTextColor(ContextCompat.getColor(requireContext(), R.color.button_text_unselected))
+        }
     }
 
     private fun switchToRegisterMode() {

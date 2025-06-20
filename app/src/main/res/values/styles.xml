@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Стиль для нижнего меню -->
+    <style name="BottomNavigationTheme" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="android:background">@color/white</item>
+        <item name="itemIconTint">@drawable/bottom_nav_icon_color</item>
+        <item name="itemTextColor">@drawable/bottom_nav_icon_color</item>
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.BottomNavigationView</item>
+    </style>
+
+    <style name="ThemeOverlay.App.BottomNavigationView" parent="">
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorOnSurface">@color/bottom_nav_icon_unselected</item>
+    </style>
+</resources>

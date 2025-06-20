@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Базовые темы -->
+    <style name="Theme.Atelie" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Основные цвета -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryDark">@color/purple_700</item>
+        <item name="colorAccent">@color/teal_200</item>
+    </style>
 
-    <style name="Theme.Atelie" parent="Theme.AppCompat.Light.NoActionBar" />
+    <!-- Темная тема (если нужно) -->
+    <style name="Theme.Atelie.Dark" parent="Theme.MaterialComponents.NoActionBar">
+        <!-- Те же цвета или другие для темной темы -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryDark">@color/purple_700</item>
+        <item name="colorAccent">@color/teal_200</item>
+    </style>
 </resources>

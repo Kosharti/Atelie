@@ -42,8 +42,8 @@
 
                 <Button
                     android:id="@+id/btnDecrease"
-                    android:layout_width="40dp"
-                    android:layout_height="30dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:text="-"/>
 
                 <TextView
@@ -54,8 +54,8 @@
 
                 <Button
                     android:id="@+id/btnIncrease"
-                    android:layout_width="40dp"
-                    android:layout_height="30dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:text="+"/>
             </LinearLayout>
         </LinearLayout>
