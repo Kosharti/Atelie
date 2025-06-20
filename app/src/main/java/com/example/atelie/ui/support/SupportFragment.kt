@@ -62,7 +62,9 @@ class SupportFragment : Fragment() {
             withContext(Dispatchers.Main) {
                 adapter = MessageAdapter(messages)
                 binding.rvMessages.adapter = adapter
-                scrollToBottom()
+                if (messages.isNotEmpty()) {
+                    scrollToBottom()
+                }
             }
         }
     }
@@ -89,8 +91,10 @@ class SupportFragment : Fragment() {
     }
 
     private fun scrollToBottom() {
-        binding.rvMessages.post {
-            binding.rvMessages.smoothScrollToPosition(adapter.itemCount - 1)
+        if (adapter.itemCount > 0) {
+            binding.rvMessages.post {
+                binding.rvMessages.smoothScrollToPosition(adapter.itemCount - 1)
+            }
         }
     }
 }

@@ -19,4 +19,23 @@
         android:id="@+id/supportFragment"
         android:name="com.example.atelie.ui.support.SupportFragment"
         android:label="Поддержка" />
+    <fragment
+        android:id="@+id/orderHistoryFragment"
+        android:name="com.example.atelie.ui.orders.OrderHistoryFragment"
+        android:label="Мои заказы">
+
+        <action
+            android:id="@+id/action_orderHistoryFragment_to_orderDetailsFragment"
+            app:destination="@id/orderDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/orderDetailsFragment"
+        android:name="com.example.atelie.ui.orders.OrderDetailsFragment"
+        android:label="Детали заказа">
+
+        <argument
+            android:name="order_id"
+            app:argType="integer" />
+    </fragment>
 </navigation>

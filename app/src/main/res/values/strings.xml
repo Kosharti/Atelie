@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Atelie</string>
+    <string name="product_image_desc">Изображение товара\n</string>
 </resources>

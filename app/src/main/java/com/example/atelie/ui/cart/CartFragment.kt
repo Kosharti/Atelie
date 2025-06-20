@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.atelie.data.AppDatabase
 import com.example.atelie.data.entity.Cart
 import com.example.atelie.data.entity.CartWithProduct
+import com.example.atelie.data.entity.Order
+import com.example.atelie.data.entity.OrderItem
 import com.example.atelie.databinding.FragmentCartBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -112,6 +114,15 @@ class CartFragment : Fragment() {
 
         CoroutineScope(Dispatchers.IO).launch {
             val cartItems = db.atelierDao().getCartItems(userId)
+
+            // Добавляем проверку на пустую корзину
+            if (cartItems.isEmpty()) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), "Корзина пуста", Toast.LENGTH_SHORT).show()
+                }
+                return@launch
+            }
+
             val allAvailable = cartItems.all { cart ->
                 val product = db.atelierDao().getProductById(cart.productId)
                 product?.stock?.let { it >= cart.quantity } ?: false
@@ -119,22 +130,82 @@ class CartFragment : Fragment() {
 
             withContext(Dispatchers.Main) {
                 if (allAvailable) {
-                    showCheckoutDialog()
+                    showCheckoutDialog(userId, cartItems)
                 } else {
                     Toast.makeText(requireContext(), "Некоторые товары закончились", Toast.LENGTH_SHORT).show()
-                    loadCartItems()  // Обновляем список
+                    loadCartItems()
                 }
             }
         }
     }
 
-    private fun showCheckoutDialog() {
+    private suspend fun showCheckoutDialog(userId: Int, cartItems: List<Cart>) {
+        if (cartItems.isEmpty()) {
+            withContext(Dispatchers.Main) {
+                Toast.makeText(requireContext(), "Корзина пуста", Toast.LENGTH_SHORT).show()
+            }
+            return
+        }
+
+        val totalPrice = cartItems.sumOf { cart ->
+            val product = db.atelierDao().getProductById(cart.productId)
+            product?.price?.times(cart.quantity) ?: 0.0
+        }
+
         AlertDialog.Builder(requireContext())
             .setTitle("Оформление заказа")
-            .setMessage("Заказ оформлен! Спасибо за покупку.")
-            .setPositiveButton("OK") { _, _ ->
-                clearCart()
+            .setMessage("Заказ на сумму ${totalPrice} ₽. Подтвердить?")
+            .setPositiveButton("Подтвердить") { _, _ ->
+                CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        // Создаем заказ
+                        val orderId = db.atelierDao().insertOrder(
+                            Order(
+                                userId = userId,
+                                totalPrice = totalPrice
+                            )
+                        ).toInt()
+
+                        // Добавляем товары в заказ
+                        val orderItems = cartItems.mapNotNull { cart ->
+                            val product = db.atelierDao().getProductById(cart.productId)
+                            product?.let {
+                                OrderItem(
+                                    orderId = orderId,
+                                    productId = cart.productId,
+                                    quantity = cart.quantity,
+                                    priceAtOrder = product.price
+                                )
+                            }
+                        }
+                        db.atelierDao().insertOrderItems(orderItems)
+
+                        // Обновляем количество товаров на складе
+                        cartItems.forEach { cart ->
+                            val product = db.atelierDao().getProductById(cart.productId)
+                            product?.let {
+                                // Вместо insertProduct используем update (нужно добавить метод в DAO)
+                                db.atelierDao().updateProduct(
+                                    it.copy(stock = it.stock - cart.quantity)
+                                )
+                            }
+                        }
+
+                        // Очищаем корзину
+                        db.atelierDao().clearCart(userId)
+
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(requireContext(), "Заказ оформлен!", Toast.LENGTH_SHORT).show()
+                            loadCartItems()
+                        }
+                    } catch (e: Exception) {
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(requireContext(), "Ошибка при оформлении заказа: ${e.message}", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
             }
+            .setNegativeButton("Отмена", null)
             .show()
     }
 

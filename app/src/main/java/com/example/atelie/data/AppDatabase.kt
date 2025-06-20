@@ -7,11 +7,13 @@ import androidx.room.RoomDatabase
 import com.example.atelie.data.dao.AtelierDao
 import com.example.atelie.data.entity.Cart
 import com.example.atelie.data.entity.Message
+import com.example.atelie.data.entity.Order
+import com.example.atelie.data.entity.OrderItem
 import com.example.atelie.data.entity.Product
 import com.example.atelie.data.entity.User
 
 @Database(
-    entities = [User::class, Product::class, Cart::class, Message::class],
+    entities = [User::class, Product::class, Cart::class, Message::class,  Order::class, OrderItem::class ],
     version = 1,
     exportSchema = false
 )

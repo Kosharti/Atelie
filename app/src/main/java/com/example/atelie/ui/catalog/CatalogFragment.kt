@@ -17,6 +17,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import com.example.atelie.data.entity.Product
+import com.example.atelie.R
 
 class CatalogFragment : Fragment() {
     private lateinit var binding: FragmentCatalogBinding
@@ -50,6 +52,15 @@ class CatalogFragment : Fragment() {
 
     private fun loadProducts(category: String = "Все", query: String = "") {
         CoroutineScope(Dispatchers.IO).launch {
+            // Временный код для добавления тестовых продуктов
+            if (db.atelierDao().getAllProducts().isEmpty()) {
+                val testProducts = listOf(
+                    Product(name = "Платье летнее", price = 2500.0, stock = 10, category = "Платья", imageRes = R.drawable.dress1),
+                    Product(name = "Костюм классический", price = 3500.0, stock = 5, category = "Костюмы", imageRes = R.drawable.suit1)
+                )
+                db.atelierDao().insertProducts(testProducts)
+            }
+
             val products = if (category == "Все") {
                 if (query.isEmpty()) db.atelierDao().getAllProducts()
                 else db.atelierDao().searchProducts(query)
@@ -58,6 +69,7 @@ class CatalogFragment : Fragment() {
                 else db.atelierDao().getProductsByCategory(category)
                     .filter { it.name.contains(query, ignoreCase = true) }
             }
+
             withContext(Dispatchers.Main) {
                 productAdapter = ProductAdapter(products) { productId ->
                     addToCart(productId)

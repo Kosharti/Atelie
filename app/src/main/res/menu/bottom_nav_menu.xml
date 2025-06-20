@@ -15,4 +15,8 @@
         android:id="@+id/supportFragment"
         android:icon="@drawable/ic_support"
         android:title="Поддержка" />
+    <item
+        android:id="@+id/orderHistoryFragment"
+        android:icon="@drawable/ic_orders"
+        android:title="Заказы" />
 </menu>
